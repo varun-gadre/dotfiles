@@ -56,7 +56,7 @@ vim.cmd([[
 set signcolumn=yes
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
-
+local cmp_autopairs = require('nvim-autopairs.completion.cmp')
 -- Completion Plugin Setup
 local cmp = require'cmp'
 cmp.setup({
@@ -109,6 +109,11 @@ cmp.setup({
       end,
   },
 })
+
+cmp.event:on(
+  'confirm_done',
+  cmp_autopairs.on_confirm_done()
+)
 require('nvim-treesitter.configs').setup {
   ensure_installed = { "lua", "rust", "toml", "typescript" },
   auto_install = true,
@@ -127,4 +132,5 @@ require('lspconfig').tsserver.setup {
    capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
-print("Hello from Dindian")
+require("trouble").setup()
+require("nvim-tree").setup()

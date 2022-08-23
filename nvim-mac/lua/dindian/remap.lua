@@ -1,2 +1,6 @@
 local nnoremap = require("dindian.keymap").nnoremap
-nnoremap("<leader>pv", "<cmd>Ex<CR>")
+nnoremap("<leader>v", "<cmd>NvimTreeToggle<CR>")
+
+nnoremap("<leader>f", "<cmd>NvimTreeFocus<CR>")
+
+
