@@ -99,6 +99,16 @@ _G.packer_plugins = {
     path = "C:\\Users\\omnicom\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\cmp-vsnip",
     url = "https://github.com/hrsh7th/cmp-vsnip"
   },
+  fzf = {
+    loaded = true,
+    path = "C:\\Users\\omnicom\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\fzf",
+    url = "https://github.com/junegunn/fzf"
+  },
+  ["fzf.vim"] = {
+    loaded = true,
+    path = "C:\\Users\\omnicom\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\fzf.vim",
+    url = "https://github.com/junegunn/fzf.vim"
+  },
   ["mason-lspconfig.nvim"] = {
     loaded = true,
     path = "C:\\Users\\omnicom\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\mason-lspconfig.nvim",

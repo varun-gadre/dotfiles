@@ -27,6 +27,9 @@ return require('packer').startup(function(use)
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   }
+
+  use "junegunn/fzf"
+  use "junegunn/fzf.vim" --fuzzy find search
   use 'kyazdani42/nvim-web-devicons'
   use 'folke/trouble.nvim'
   use {

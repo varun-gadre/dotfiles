@@ -2,8 +2,11 @@ require("dindian.set")
 require("dindian.remap")
 require("dindian.packer")
 require("dindian.opts")
+require("dindian.fzfconf")
 require("mason").setup()
 require("mason-lspconfig").setup()
+
+
 
 local rt = {
     server = {
