@@ -3,4 +3,3 @@
 -- you can even override default options here (core/options.lua)
 --
 --
-require('telescope').load_extension('fzf')
