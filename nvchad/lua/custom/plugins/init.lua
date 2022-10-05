@@ -29,7 +29,7 @@ return {
    ["elkowar/yuck.vim"] = { ft = "yuck" },
    ["goolord/alpha-nvim"] = {
          disable = false,
-      },
+    },
    ["max397574/better-escape.nvim"] = {
       event = "InsertEnter",
       config = function()
@@ -41,5 +41,51 @@ return {
       require "plugins.configs.lspconfig"
       require "custom.plugins.lspconfig"
     end,
-  }
+  },
+  ['mfussenegger/nvim-dap'] = {},
+  ['rrethy/vim-illuminate'] = {},
+
+  ['simrat39/rust-tools.nvim'] = {
+        after = "nvim-lspconfig",
+        config = function()
+            local rt = require('rust-tools')
+            rt.setup({
+                tools = {
+                    crate_graph = {
+                        full = false,
+                        backend = "png",
+                        output = "./crate-graph.png",
+                    },
+                    inlay_hints = {
+                        auto = true,
+                    },
+                },
+                server = {
+                    settings = {
+                        on_attach = function(_, bufnr)
+                            -- Hover actions
+                            vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+                            -- Code action groups
+                            vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+                        end,
+                        ['rust-analyzer'] = {
+                            assist = {
+                                importPrefix = "by_self",
+                            },
+                            cargo = {
+                                allFeatures = true,
+                            },
+                            checkOnSave = {
+                                command = "cargo clippy && cargo +nightly format"
+                            },
+                            lens = {
+                                references = true,
+                                methodReferences = true,
+                            },
+                        }
+                    }
+                }
+            })
+        end
+    }
 }
