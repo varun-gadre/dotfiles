@@ -42,49 +42,89 @@ return {
       require "custom.plugins.lspconfig"
     end,
   },
-  ['mfussenegger/nvim-dap'] = {},
-  ['rrethy/vim-illuminate'] = {},
+  ['mfussenegger/nvim-dap'] = {
+        after = "rust-tools.nvim",
+        config = function()
+            local dap, dapui = require("dap"), require("dapui")
+            dap.listeners.after.event_initialized["dapui_config"] = function()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function()
+                dapui.close()
+            end
+            dap.adapters.cppdbg = {
+                id = 'cppdbg',
+                type = 'executable',
+                command = 'C:\\Users\\omnicom\\AppData\\Local\\nvim-data\\mason\\packages\\cpptools\\extension\\debugAdapters\\bin\\OpenDebugAD7.exe',
+                options = {
+                    detached = false
+                },
+                setupCommands = { 
+                    {
+                        text = '-enable-pretty-printing',
+                        description =  'enable pretty printing',
+                        ignoreFailures = false 
+                    },
+                }
+            }
+            local source_file_map = 'C:\\Users\\omnicom\\dev\\rs-omnicom\\src'
+            dap.configurations.rust = {
+                {
+                    name = "Rust debug",
+                    type = "cppdbg",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/target/debug/', 'file')
+                    end,
+                    cwd = '${workspaceFolder}',
+                    stopOnEntry = true,
+                    sourceFileMap = {
+                        source_file_map = {
+                            editorPath = source_file_map,
+                            useForBreakpoints = true
+                        }
+                    }
 
-  ['simrat39/rust-tools.nvim'] = {
+                },
+            }
+        end
+    },
+    ["rcarriga/nvim-dap-ui"] = {
+        after = "nvim-dap",
+        config = function ()
+            local dapui = require("dapui")
+            dapui.setup()
+        end
+    },
+    ['rrethy/vim-illuminate'] = {},
+
+    ['simrat39/rust-tools.nvim'] = {
         after = "nvim-lspconfig",
         config = function()
-            local rt = require('rust-tools')
+            local extension_path = vim.env.HOME .. '\\.vscode\\extensions\\vadimcn.vscode-lldb-1.6.7\\'
+            local codelldb_path = extension_path .. 'adapter\\codelldb'
+            local liblldb_path = extension_path .. 'lldb\\lib\\liblldb.lib'
+            local rt = require("rust-tools")
             rt.setup({
                 tools = {
-                    crate_graph = {
-                        full = false,
-                        backend = "png",
-                        output = "./crate-graph.png",
-                    },
                     inlay_hints = {
                         auto = true,
                     },
+                    hover_actions = {
+                        auto_focus = true,
+                    }
                 },
                 server = {
-                    settings = {
-                        on_attach = function(_, bufnr)
-                            -- Hover actions
-                            vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-                            -- Code action groups
-                            vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-                        end,
-                        ['rust-analyzer'] = {
-                            assist = {
-                                importPrefix = "by_self",
-                            },
-                            cargo = {
-                                allFeatures = true,
-                            },
-                            checkOnSave = {
-                                command = "cargo clippy && cargo +nightly format"
-                            },
-                            lens = {
-                                references = true,
-                                methodReferences = true,
-                            },
-                        }
-                    }
-                }
+                    on_attach = function(_, bufnr)
+                        -- Hover actions
+                        vim.keymap.set("n", "<Leader>h", rt.hover_actions.hover_actions, { buffer = bufnr })
+                        -- Code action groups
+                        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+                    end,
+                },
             })
         end
     }

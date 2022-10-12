@@ -6,6 +6,26 @@
 --
 --
 -- vim.opt.guicursor = ""
+--
+local M = {}
+
+function bind(op, outer_opts)
+    outer_opts = outer_opts or {noremap = true}
+    return function(lhs, rhs, opts)
+        opts = vim.tbl_extend("force",
+            outer_opts,
+            opts or {}
+        )
+        vim.keymap.set(op, lhs, rhs, opts)
+    end
+end
+
+M.nmap = bind("n", {noremap = false})
+M.nnoremap = bind("n")
+M.vnoremap = bind("v")
+M.xnoremap = bind("x")
+M.inoremap = bind("i")
+
 vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 vim.opt.nu = true
 vim.opt.relativenumber = true
@@ -43,4 +63,12 @@ vim.opt.completeopt = {'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess = vim.opt.shortmess + { c = true}
 vim.api.nvim_set_option('updatetime', 300)
 
-
+M.nnoremap("<leader>gd", function()
+    vim.lsp.buf.definition()
+end)
+M.nnoremap("<C-LeftMouse>", function()
+    vim.lsp.buf.definition()
+end)
+M.nnoremap("<leader>k", function()
+    vim.lsp.buf.hover()
+end)
